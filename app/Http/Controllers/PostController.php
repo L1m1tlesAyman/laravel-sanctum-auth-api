@@ -39,9 +39,9 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Post $post)
     {
-        $post = Post::findOrFail($id);
+        $post = $post->load('user');
         return response()->json([
             'post' => new PostResource($post)
         ],200);
@@ -50,10 +50,9 @@ class PostController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(PostRequest $request, string $id)
+    public function update(PostRequest $request, Post $post)
     {
         $validated = $request->validated();
-        $post = Post::findOrFail($id);
 
         if($request->user()->id !== $post->user_id){
             return response()->json([
@@ -73,10 +72,8 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(PostRequest $request , string $id)
+    public function destroy(PostRequest $request , Post $post)
     {
-        $post = Post::findOrFail($id);
-
         if($request->user()->id !== $post->user_id){
             return response()->json([
                 'message' => 'you dont have permissions to touch this resource'
