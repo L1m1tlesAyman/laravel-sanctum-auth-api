@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -24,14 +25,10 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
         //
-        $userInfo = $request->validate([
-            'name' => ['required','min:5','max:255'],
-            'email' => ['required','email','unique:users,email'],
-            'password' => ['required','min:8','max:255']
-        ]);
+        $userInfo = $request->validated();
 
         $user = User::create([
             'name' => $userInfo['name'],
@@ -60,22 +57,25 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UserRequest $request, string $id)
     {
         //
         $user = User::findOrFail($id);
+        if((int)$request->user()->id !== (int)$id && $request->user()->role !== 'admin'){
+            return response()->json([
+                'message' => 'You do not have permission to update this profile.'
+            ],403);
+        }
 
-        $userInfo = $request->validate([
-            'name' => ['required','min:5','max:255'],
-            'email' => ['required','email','unique:users,email,'.$user->id],
-            'password' => ['required','min:8','max:255']
-        ]);
+        $userInfo = $request->validated();
+        
+        if(empty($userInfo['password'])){
+            unset($userInfo['password']);
+        }else{
+            $userInfo['password'] = Hash::make($userInfo['password']);
+        }
 
-        $user->name = $userInfo['name'];
-        $user->email = $userInfo['email'];
-        $user->password = Hash::make($userInfo['password']);
-
-        $user->save();
+        $user->update($userInfo);
 
         return response()->json([
             'updated_user' => new UserResource($user)
@@ -85,13 +85,18 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request , string $id)
     {
+        if((int)$request->user()->id !== (int)$id && $request->user()->role !== 'admin'){
+            return response()->json([
+                'message' => 'You do not have permission to Delete this profile.'
+            ],403);
+        }
         $user = User::findOrFail($id);
         $user->delete();
         
         return response()->json([
             'message' => 'User Deleted Successflly'
-        ],204);
+        ],200);
     }
 }

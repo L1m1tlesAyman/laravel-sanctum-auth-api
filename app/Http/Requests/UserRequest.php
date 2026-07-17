@@ -12,7 +12,7 @@ class UserRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,10 +22,15 @@ class UserRequest extends FormRequest
      */
     public function rules(): array
     {
+         $userId = $this->route('user')?->id ?? $this->route('user') ?? $this->route('id');
         return [
             'name' => ['required','min:5','max:255'],
-            'email' => ['required','email','unique:users,email,'.$this->id],
-            'password' => ['required','min:8','max:255']
+            'email' => ['required','email','unique:users,email,'.$userId],
+            'password' => [
+                $this->isMethod('post') ? 'required' : 'nullable' ,
+                'min:8',
+                'max:255'
+                          ]
         ];
     }
 }
