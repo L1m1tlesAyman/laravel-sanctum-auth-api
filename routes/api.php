@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -29,4 +30,10 @@ Route::middleware('auth:sanctum')->group(function(){
     });
     //
     Route::apiResource('posts',PostController::class);
+    //
+    Route::get('/posts/{post}/comments',[CommentController::class,'index']);
+    Route::post('/posts/{post}/comments',[CommentController::class,'store']);
+    Route::get('/posts/{post}/comments/{comment}',[CommentController::class,'show']);
+    Route::put('/posts/{post}/comments/{comment}',[CommentController::class,'update']);
+    Route::delete('/posts/{post}/comments/{comment}',[CommentController::class,'destroy']);
 });
