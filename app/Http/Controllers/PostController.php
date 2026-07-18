@@ -43,7 +43,7 @@ class PostController extends Controller
     {
         $post = $post->load('user');
         return response()->json([
-            'post' => new PostResource($post)
+            'post' => new PostResource($post),
         ],200);
     }
 
@@ -54,11 +54,7 @@ class PostController extends Controller
     {
         $validated = $request->validated();
 
-        if($request->user()->id !== $post->user_id){
-            return response()->json([
-                'message' => 'you dont have permissions to touch this resource'
-            ],403);
-        }
+        $this->authorize('update',$post);
 
         $post->title = $validated['title'];
         $post->body = $validated['body'];
@@ -72,13 +68,9 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(PostRequest $request , Post $post)
+    public function destroy(Post $post)
     {
-        if($request->user()->id !== $post->user_id){
-            return response()->json([
-                'message' => 'you dont have permissions to touch this resource'
-            ],403);
-        }
+        $this->authorize('delete',$post);
 
         $post->delete();
 

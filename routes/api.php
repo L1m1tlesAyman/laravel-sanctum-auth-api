@@ -32,8 +32,8 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::apiResource('posts',PostController::class);
     //
     Route::get('/posts/{post}/comments',[CommentController::class,'index']);
+    //Route::get('comments/{comment}',[CommentController::class,'show']);
     Route::post('/posts/{post}/comments',[CommentController::class,'store']);
-    Route::get('/posts/{post}/comments/{comment}',[CommentController::class,'show']);
     Route::put('/posts/{post}/comments/{comment}',[CommentController::class,'update']);
     Route::delete('/posts/{post}/comments/{comment}',[CommentController::class,'destroy']);
 });

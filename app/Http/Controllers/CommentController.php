@@ -34,31 +34,27 @@ class CommentController extends Controller
         ]);
 
         return response()->json([
-            'comment' => new CommentResource($comment)
+            'comment' => $comment
         ],201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Comment $comment)
-    {
-        $cmnt = $comment->load('user');
-        return response()->json([
-            'comment' => new CommentResource($cmnt)
-        ],200);
-    }
+    //public function show(Comment $comment)
+    //{
+    //    $cmnt = $comment->load('user');
+    //    return response()->json([
+    //        'comment' => new CommentResource($cmnt)
+    //    ],200);
+    //}
 
     /**
      * Update the specified resource in storage.
      */
     public function update(CommentRequest $request, Comment $comment)
     {
-        if((int)$request->user()->id !== (int)$comment->user_id && $request->user()->role !== 'admin'){
-            return response()->json([
-                'message' => 'You do not have permission to updated this comment'
-            ],403);
-        }
+        $this->authorize('update',$comment);
 
         $commentInfo = $request->validated();
         $comment->update($commentInfo);
@@ -73,11 +69,7 @@ class CommentController extends Controller
      */
     public function destroy(Request $request , Comment $comment)
     {
-        if((int)$request->user()->id !== (int)$comment->user_id && $request->user()->role !== 'admin'){
-            return response()->json([
-                'message' => 'You do not have permission to delete this comment'
-            ],403);
-        }
+        $this->authorize('delete',$comment);
 
         $comment->delete();
         return response()->json([
