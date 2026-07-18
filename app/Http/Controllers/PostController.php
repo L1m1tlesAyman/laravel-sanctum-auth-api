@@ -43,7 +43,7 @@ class PostController extends Controller
     {
         $post = $post->load('user');
         return response()->json([
-            'post' => new PostResource($post)
+            'post' => new PostResource($post),
         ],200);
     }
 

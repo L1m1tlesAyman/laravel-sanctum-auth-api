@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -9,14 +10,9 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    public function register(Request $request){
+    public function register(UserRequest $request){
 
-        $userInfo = $request->validate([
-            'name' => ['required','min:5','max:255'],
-            'email' => ['required','email','unique:users,email'],
-            'password' => ['required','min:8','max:255'],
-            'role' => ['nullable', 'string', 'in:user,admin']
-        ]);
+        $userInfo = $request->validated();
 
         $user = User::create([
             'name' => $userInfo['name'],
@@ -33,7 +29,7 @@ class AuthController extends Controller
     public function login(Request $request){
         $userInfo = $request->validate([
             'email' => ['required','email'],
-            'password' => ['required','min:8','max:255']
+            'password' => ['required','min:8','max:255'],
         ]);
 
         $user = User::where('email',$userInfo['email'])->first();

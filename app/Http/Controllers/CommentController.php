@@ -34,20 +34,20 @@ class CommentController extends Controller
         ]);
 
         return response()->json([
-            'comment' => new CommentResource($comment)
+            'comment' => $comment
         ],201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Comment $comment)
-    {
-        $cmnt = $comment->load('user');
-        return response()->json([
-            'comment' => new CommentResource($cmnt)
-        ],200);
-    }
+    //public function show(Comment $comment)
+    //{
+    //    $cmnt = $comment->load('user');
+    //    return response()->json([
+    //        'comment' => new CommentResource($cmnt)
+    //    ],200);
+    //}
 
     /**
      * Update the specified resource in storage.

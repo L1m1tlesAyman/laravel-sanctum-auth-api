@@ -26,11 +26,12 @@ class UserRequest extends FormRequest
         return [
             'name' => ['required','min:5','max:255'],
             'email' => ['required','email','unique:users,email,'.$userId],
+            'role' => ['nullable', 'string', 'in:user,admin'],
             'password' => [
                 $this->isMethod('post') ? 'required' : 'nullable' ,
                 'min:8',
                 'max:255'
-                          ]
+                          ],
         ];
     }
 }
