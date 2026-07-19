@@ -41,13 +41,13 @@ class CommentController extends Controller
     /**
      * Display the specified resource.
      */
-    //public function show(Comment $comment)
-    //{
-    //    $cmnt = $comment->load('user');
-    //    return response()->json([
-    //        'comment' => new CommentResource($cmnt)
-    //    ],200);
-    //}
+    public function show(Comment $comment)
+    {
+        $cmnt = $comment->load('user');
+        return response()->json([
+            'comment' => new CommentResource($cmnt)
+        ],200);
+    }
 
     /**
      * Update the specified resource in storage.
@@ -67,7 +67,7 @@ class CommentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request , Comment $comment)
+    public function destroy(Comment $comment)
     {
         $this->authorize('delete',$comment);
 
