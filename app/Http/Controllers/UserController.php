@@ -10,11 +10,26 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    //
+    public function follow(Request $request , User $user){
+        //
+        if((int)$user->id === (int)$request->user()->id){
+            return response()->json([
+                'message' => 'You cannot follow yourself.'
+            ],422);
+        }
+        $user = $request->user()->following()->toggle($user->id);
+
+        return response()->json([
+            'follow' => !empty($user['attached'])
+        ]);
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        //
         $users = User::all();
 
         return response()->json([

@@ -8,6 +8,7 @@ use App\Http\Controllers\ReplyController;
 use App\Http\Controllers\RepostController;
 use App\Http\Controllers\SaveController;
 use App\Http\Controllers\UserController;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,11 +22,12 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('/logout',[AuthController::class,'logout']);
     //
     Route::get('/profile',function (Request $request){
-        return $request->user();
+        return new UserResource($request->user());
     });
     //
-    Route::put('/users/{id}',[UserController::class,'update']);
     Route::get('/users/{id}',[UserController::class,'show']);
+    Route::post('/users/{user}/follow',[UserController::class,'follow']);
+    Route::put('/users/{id}',[UserController::class,'update']);
     //
     Route::middleware('admin')->group(function(){
         Route::delete('/users/{id}',[UserController::class,'destroy']);

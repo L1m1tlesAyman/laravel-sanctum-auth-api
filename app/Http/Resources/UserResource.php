@@ -20,6 +20,8 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'role' => $this->role,
             'created_at' => $this->created_at->toDateTimeString(),
+            'followers' => $this->followers->count(),
+            'following' => $this->following->count()
         ];
     }
 }
