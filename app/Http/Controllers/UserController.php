@@ -24,6 +24,22 @@ class UserController extends Controller
             'follow' => !empty($user['attached'])
         ]);
     }
+
+    public function followers(User $user){
+        //
+        $followers = $user->load('followers');
+        return response()->json([
+            'followers' => UserResource::collection($followers->followers)
+        ]);
+    }
+
+    public function following(User $user){
+        //
+        $followers = $user->load('following');
+        return response()->json([
+            'following' => UserResource::collection($followers->following)
+        ]);
+    }
     /**
      * Display a listing of the resource.
      */

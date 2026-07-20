@@ -26,6 +26,8 @@ Route::middleware('auth:sanctum')->group(function(){
     });
     //
     Route::get('/users/{id}',[UserController::class,'show']);
+    Route::get('/users/{user}/followers',[UserController::class,'followers']);
+    Route::get('/users/{user}/following',[UserController::class,'following']);
     Route::post('/users/{user}/follow',[UserController::class,'follow']);
     Route::put('/users/{id}',[UserController::class,'update']);
     //
