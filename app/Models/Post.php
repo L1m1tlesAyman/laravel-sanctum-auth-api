@@ -35,4 +35,9 @@ class Post extends Model
     {
         return $this->belongsToMany(User::class,'reposts')->withTimestamps();
     }
+
+    public function saves(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class,'saves')->withTimestamps();
+    }
 }

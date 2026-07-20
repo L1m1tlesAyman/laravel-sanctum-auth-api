@@ -6,6 +6,7 @@ use App\Http\Controllers\LikesController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ReplyController;
 use App\Http\Controllers\RepostController;
+use App\Http\Controllers\SaveController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -33,10 +34,12 @@ Route::middleware('auth:sanctum')->group(function(){
     });
     //
     Route::apiResource('posts',PostController::class);
-    Route::get('posts/{post}/liked_users',[LikesController::class,'likedUsers']);
+    Route::get('posts/{post}/likes',[LikesController::class,'likedUsers']);
     Route::post('posts/{post}/like',[LikesController::class,'like']);
-    Route::get('posts/{post}/reposted_users',[RepostController::class,'repostsUsers']);
+    Route::get('posts/{post}/reposts',[RepostController::class,'repostsUsers']);
     Route::post('posts/{post}/repost',[RepostController::class,'repost']);
+    Route::get('posts/{post}/saves',[SaveController::class,'saves']);
+    Route::post('posts/{post}/save',[SaveController::class,'save']);
     //
     Route::get('/posts/{post}/comments',[CommentController::class,'index']);
     Route::get('comments/{comment}',[CommentController::class,'show']);
