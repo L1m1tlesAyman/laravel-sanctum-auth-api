@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\FeedController;
 use App\Http\Controllers\LikesController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ReplyController;
@@ -19,16 +20,16 @@ Route::post('/login',[AuthController::class,'login']);
 //
 Route::middleware('auth:sanctum')->group(function(){
     //
-    Route::get('/logout',[AuthController::class,'logout']);
-    //
     Route::get('/profile',function (Request $request){
         return new UserResource($request->user());
     });
     //
-    Route::get('/users/{id}',[UserController::class,'show']);
+    Route::post('/logout',[AuthController::class,'logout']);
+    //
     Route::get('/users/{user}/followers',[UserController::class,'followers']);
     Route::get('/users/{user}/following',[UserController::class,'following']);
     Route::post('/users/{user}/follow',[UserController::class,'follow']);
+    Route::get('/users/{id}',[UserController::class,'show']);
     Route::put('/users/{id}',[UserController::class,'update']);
     //
     Route::middleware('admin')->group(function(){
@@ -56,4 +57,6 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::get('/replies/{reply}', [ReplyController::class, 'show']);
     Route::put('/replies/{reply}', [ReplyController::class, 'update']);
     Route::delete('/replies/{reply}', [ReplyController::class, 'destroy']);
+    //
+    Route::get('/feed',[FeedController::class,'index']);
 });
