@@ -59,4 +59,6 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::delete('/replies/{reply}', [ReplyController::class, 'destroy']);
     //
     Route::get('/feed',[FeedController::class,'index']);
+    //
+    
 });

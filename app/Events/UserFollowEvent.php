@@ -18,7 +18,7 @@ class UserFollowEvent
     /**
      * Create a new event instance.
      */
-    public function __construct(public User $user)
+    public function __construct(public User $follower , public User $followed)
     {
         //
     }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserCommentedEvent;
 use App\Http\Requests\CommentRequest;
 use App\Http\Resources\CommentResource;
 use App\Models\Comment;
@@ -15,6 +16,7 @@ class CommentController extends Controller
      */
     public function index(Post $post)
     {
+        //
         $comments = $post->comments()->with('user')->get();
 
         return response()->json([
@@ -27,11 +29,14 @@ class CommentController extends Controller
      */
     public function store(CommentRequest $request , Post $post)
     {
+        //
         $commentInfo = $request->validated();
         $comment = $post->comments()->create([
             'body' => $commentInfo['body'],
             'user_id' => $request->user()->id,
         ]);
+
+        event(new UserCommentedEvent($request->user() , $post));
 
         return response()->json([
             'comment' => $comment
@@ -43,6 +48,7 @@ class CommentController extends Controller
      */
     public function show(Comment $comment)
     {
+        //
         $cmnt = $comment->load('user');
         return response()->json([
             'comment' => new CommentResource($cmnt)
@@ -54,6 +60,7 @@ class CommentController extends Controller
      */
     public function update(CommentRequest $request, Comment $comment)
     {
+        //
         $this->authorize('update',$comment);
 
         $commentInfo = $request->validated();
@@ -69,6 +76,7 @@ class CommentController extends Controller
      */
     public function destroy(Comment $comment)
     {
+        //
         $this->authorize('delete',$comment);
 
         $comment->delete();

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserFollowEvent;
 use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
@@ -11,15 +12,17 @@ use Illuminate\Support\Facades\Hash;
 class UserController extends Controller
 {
     //
-    public function follow(Request $request , User $user){
+    public function follow(Request $request , User $User){
         //
-        if((int)$user->id === (int)$request->user()->id){
+        if((int)$User->id === (int)$request->user()->id){
             return response()->json([
                 'message' => 'You cannot follow yourself.'
             ],422);
         }
-        $user = $request->user()->following()->toggle($user->id);
-
+        $user = $request->user()->following()->toggle($User->id);
+        if(!empty($user["attached"])){
+            event(new UserFollowEvent($request->user(),$User));
+        }
         return response()->json([
             'follow' => !empty($user['attached'])
         ]);
