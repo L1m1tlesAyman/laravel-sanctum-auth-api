@@ -60,6 +60,7 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::delete('/replies/{reply}', [ReplyController::class, 'destroy']);
     //
     Route::get('/feed',[FeedController::class,'index']);
+    Route::get('/feed/most-liked',[FeedController::class,'mostLiked']);
     //
     Route::get('/notifications', [NotificationController::class, 'getAllNotifications']);
     Route::get('/notifications/unread', [NotificationController::class, 'getUnReadNotifications']);

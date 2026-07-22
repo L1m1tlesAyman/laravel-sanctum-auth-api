@@ -18,4 +18,15 @@ class FeedController extends Controller
             'posts' => PostResource::collection($followersPosts)
         ]);
     }
+
+    public function mostLiked(){
+        $posts = Post::with('likes')->get();
+        $mostLikedPosts = $posts->sortByDesc(function ($post) {
+            return $post->likes->count();
+        });
+
+        return response()->json([
+            'posts' => PostResource::collection($mostLikedPosts->values())
+        ], 200);
+    }
 }
