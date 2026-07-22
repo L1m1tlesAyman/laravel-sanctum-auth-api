@@ -61,7 +61,8 @@ Route::middleware('auth:sanctum')->group(function(){
     //
     Route::get('/feed',[FeedController::class,'index']);
     //
-    Route::get('/notifications',[NotificationController::class,'index']);
-    Route::get('/unread-notifications',[NotificationController::class,'unreadNotifications']);
-    Route::put('/read-notifications',[NotificationController::class,'readNotifications']);
+    Route::get('/notifications', [NotificationController::class, 'getAllNotifications']);
+    Route::get('/notifications/unread', [NotificationController::class, 'getUnReadNotifications']);
+    Route::get('/notifications/read', [NotificationController::class, 'getReadNotifications']);
+    Route::put('/notifications/mark-as-read', [NotificationController::class, 'readingUserNotifications']);
 });
