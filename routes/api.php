@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\FeedController;
 use App\Http\Controllers\LikesController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ReplyController;
 use App\Http\Controllers\RepostController;
@@ -60,5 +61,7 @@ Route::middleware('auth:sanctum')->group(function(){
     //
     Route::get('/feed',[FeedController::class,'index']);
     //
-    
+    Route::get('/notifications',[NotificationController::class,'index']);
+    Route::get('/unread-notifications',[NotificationController::class,'unreadNotifications']);
+    Route::put('/read-notifications',[NotificationController::class,'readNotifications']);
 });
