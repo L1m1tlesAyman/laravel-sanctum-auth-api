@@ -13,7 +13,8 @@ class Post extends Model
     protected $fillable = [
         'title',
         'body',
-        'user_id'
+        'user_id',
+        'views_count'
     ];
 
     public function user(): BelongsTo
@@ -39,5 +40,9 @@ class Post extends Model
     public function saves(): BelongsToMany
     {
         return $this->belongsToMany(User::class,'saves')->withTimestamps();
+    }
+
+    public function views(){
+        return $this->hasMany(PostView::class);
     }
 }

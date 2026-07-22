@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PostRequest;
 use App\Http\Resources\PostResource;
 use App\Models\Post;
+use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
@@ -39,9 +40,13 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Post $post)
+    public function show(Request $request , Post $post)
     {
         $post = $post->load('user');
+        $post->views()->createOrFirst([
+            'post_id' => $post->id,
+            'user_id' => $request->user()->id
+        ]);
         return response()->json([
             'post' => new PostResource($post),
         ],200);

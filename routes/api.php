@@ -61,6 +61,7 @@ Route::middleware('auth:sanctum')->group(function(){
     //
     Route::get('/feed',[FeedController::class,'index']);
     Route::get('/feed/most-liked',[FeedController::class,'mostLiked']);
+    Route::get('/feed/most-watched',[FeedController::class,'mostWatched']);
     //
     Route::get('/notifications', [NotificationController::class, 'getAllNotifications']);
     Route::get('/notifications/unread', [NotificationController::class, 'getUnReadNotifications']);

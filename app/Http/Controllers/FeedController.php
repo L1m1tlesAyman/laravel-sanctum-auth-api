@@ -20,13 +20,22 @@ class FeedController extends Controller
     }
 
     public function mostLiked(){
-        $posts = Post::with('likes')->get();
-        $mostLikedPosts = $posts->sortByDesc(function ($post) {
-            return $post->likes->count();
-        });
+        $posts = Post::withCount('likes')
+                       ->orderBy('likes_count','desc')
+                       ->get();
+                       
+        return response()->json([
+            'posts' => PostResource::collection($posts)
+        ], 200);
+    }
+
+    public function mostWatched(){
+        $posts = Post::withCount('views')
+                       ->orderBy('views_count' , 'desc')
+                       ->get();
 
         return response()->json([
-            'posts' => PostResource::collection($mostLikedPosts->values())
+            'posts' => PostResource::collection($posts)
         ], 200);
     }
 }
