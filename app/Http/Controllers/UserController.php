@@ -28,6 +28,22 @@ class UserController extends Controller
         ]);
     }
 
+    public function suggestions(Request $request){
+        //
+        $user = $request->user();
+        $followingIds = $user->following->pluck('id');
+        $suggestions = User::whereHas('following' , function($q) use($followingIds) {
+            $q->whereIn('users_followers_following.follower_id' , $followingIds);
+        })->where('id' ,'!=', $user->id)
+          ->whereNotIn('id' , $followingIds)
+          ->take(15)
+          ->get();
+
+        return response()->json([
+            'suggestions' => UserResource::collection($suggestions)
+        ]);
+    }
+
     public function followers(User $user){
         //
         $followers = $user->load('followers');

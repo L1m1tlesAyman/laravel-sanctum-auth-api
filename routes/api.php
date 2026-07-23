@@ -27,6 +27,7 @@ Route::middleware('auth:sanctum')->group(function(){
     //
     Route::post('/logout',[AuthController::class,'logout']);
     //
+    Route::get('/suggestions',[UserController::class , 'suggestions']);
     Route::get('/users/{user}/followers',[UserController::class,'followers']);
     Route::get('/users/{user}/following',[UserController::class,'following']);
     Route::post('/users/{user}/follow',[UserController::class,'follow']);
