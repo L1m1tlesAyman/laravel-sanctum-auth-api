@@ -42,7 +42,8 @@ class Post extends Model
         return $this->belongsToMany(User::class,'saves')->withTimestamps();
     }
 
-    public function views(){
+    public function views(): HasMany
+    {
         return $this->hasMany(PostView::class);
     }
 }

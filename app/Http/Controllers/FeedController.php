@@ -11,11 +11,11 @@ class FeedController extends Controller
     //
     public function index(Request $request){
         //
-        $followersIds = $request->user()->followers->pluck('id');
-        $followersPosts = Post::whereIn('id',$followersIds)->latest()->get();
+        $followingIds = $request->user()->following->pluck('id');
+        $followingPosts = Post::whereIn('id',$followingIds)->latest()->get();
 
         return response()->json([
-            'posts' => PostResource::collection($followersPosts)
+            'posts' => PostResource::collection($followingPosts)
         ]);
     }
 
