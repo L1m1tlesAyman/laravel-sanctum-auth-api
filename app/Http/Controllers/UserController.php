@@ -25,10 +25,22 @@ class UserController extends Controller
         }
         return response()->json([
             'follow' => !empty($user['attached'])
-        ]);
+        ],202);
     }
 
-    public function suggestions(Request $request){
+    public function search(Request $request){
+        //
+        $search = $request->input('q');
+        $users = User::withCount('followers')->orderBy('followers_count' , 'desc')
+                                            ->where('name' , 'like' , "%$search%")
+                                            ->take(10)
+                                            ->get();
+        return response()->json([
+            'users' => UserResource::collection($users)
+        ],200);
+    }
+
+    public function friendsOfFriends(Request $request){
         //
         $user = $request->user();
         $followingIds = $user->following->pluck('id');
@@ -36,12 +48,24 @@ class UserController extends Controller
             $q->whereIn('users_followers_following.follower_id' , $followingIds);
         })->where('id' ,'!=', $user->id)
           ->whereNotIn('id' , $followingIds)
-          ->take(15)
+          ->take(20)
           ->get();
 
         return response()->json([
             'suggestions' => UserResource::collection($suggestions)
-        ]);
+        ],200);
+    }
+
+    public function mayYouKnow(Request $request){
+        //
+        $user = $request->user();
+        $followers = $user->followers();
+        $followingIds = $user->following->pluck('id');
+        $people = $followers->whereNotIn('id' , $followingIds)->take(20)->get();
+
+        return response()->json([
+            'suggestions' => UserResource::collection($people)
+        ],200);
     }
 
     public function followers(User $user){
@@ -49,7 +73,7 @@ class UserController extends Controller
         $followers = $user->load('followers');
         return response()->json([
             'followers' => UserResource::collection($followers->followers)
-        ]);
+        ],200);
     }
 
     public function following(User $user){
@@ -57,7 +81,7 @@ class UserController extends Controller
         $followers = $user->load('following');
         return response()->json([
             'following' => UserResource::collection($followers->following)
-        ]);
+        ],200);
     }
     /**
      * Display a listing of the resource.
