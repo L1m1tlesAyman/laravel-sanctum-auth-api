@@ -46,4 +46,9 @@ class Post extends Model
     {
         return $this->hasMany(PostView::class);
     }
+
+    public function hashtags(): BelongsToMany
+    {
+        return $this->belongsToMany(HashTags::class);
+    }
 }
